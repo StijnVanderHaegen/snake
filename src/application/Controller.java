@@ -31,7 +31,8 @@ public class Controller {
     public void runSnake() {
     	gameOverText.setVisible(false);
         startButton.setVisible(false);
-        randomizeApple();
+        apple.getCoordinates().setX(random.nextInt(24));
+        apple.getCoordinates().setY(random.nextInt(16));
         this.snake.setHeadCoordinates(new Coordinates(14,8));
         this.snake.getLastCoordinates().clear();
         this.snake.getLastCoordinates().add(new Coordinates(13,8));
@@ -43,6 +44,9 @@ public class Controller {
 			}
 		}
         chunkList.clear();
+
+        drawApple();
+
         chunkList.add(snakeChunk);
         if (score==-1) {
         snakeHead.getScene().addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
@@ -68,8 +72,17 @@ public class Controller {
 
         if (apple.getCoordinates().equals(snake.getHeadCoordinates())) {
             snake.nom();
-            this.raiseScore();
-            this.randomizeApple();
+            raiseScore();
+
+            Rectangle rect = new Rectangle(0, 0, 25, 25);
+            rect.setArcHeight(5);
+            rect.setArcWidth(5);
+            container.getChildren().add(rect);
+            chunkList.add(rect);
+            
+            apple.getCoordinates().setX(random.nextInt(24));
+            apple.getCoordinates().setY(random.nextInt(16));
+            drawApple();
         }
 
         if (snake.getHeadCoordinates().getX() > 24 || snake.getHeadCoordinates().getX() < 0 || snake.getHeadCoordinates().getY() > 16 || snake.getHeadCoordinates().getY() < 0) {
@@ -103,18 +116,6 @@ public class Controller {
     public void raiseScore() {
     	score+=100;
         scoreText.setText("score: "+score);
-    }
-    public void addChunck() {
-    	Rectangle rect = new Rectangle(0, 0, 25, 25);
-        rect.setArcHeight(5);
-        rect.setArcWidth(5);
-        container.getChildren().add(rect);
-        chunkList.add(rect);
-    }
-    public void randomizeApple() {
-    	apple.getCoordinates().setX(random.nextInt(24));
-        apple.getCoordinates().setY(random.nextInt(16));
-        drawApple();
     }
     public void badEnding() {
     	timeline.stop();
